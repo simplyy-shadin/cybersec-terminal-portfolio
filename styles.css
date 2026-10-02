@@ -258,6 +258,154 @@ main, .site-footer { position: relative; z-index: 2; }
 .terminal-input-row input { flex:1; min-width:0; padding:0; border:0; outline:0; background:transparent; color:#eaffed; caret-color:var(--green); }
 .terminal-cheats { display:flex; justify-content:flex-end; gap:16px; flex-wrap:wrap; margin-top:10px; color:#53675a; font-family:"IBM Plex Mono",monospace; font-size:.68rem; }
 
+/* Terminal contact interface */
+.terminal-contact-panel {
+  margin: 0 18px 14px;
+  padding: 20px;
+  border: 1px solid rgba(117,255,148,.18);
+  background:
+    linear-gradient(180deg, rgba(7,16,10,.96), rgba(3,9,5,.98)),
+    rgba(3,8,5,.96);
+  box-shadow: inset 0 0 40px rgba(117,255,148,.025);
+}
+.terminal-contact-panel[hidden] { display: none; }
+.contact-panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgba(117,255,148,.13);
+}
+.contact-kicker {
+  color: var(--green);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .66rem;
+  letter-spacing: .09em;
+}
+.contact-panel-head h3 {
+  margin: 4px 0 0;
+  font-size: 1.25rem;
+}
+.contact-close {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  border: 1px solid rgba(117,255,148,.14);
+  background: rgba(117,255,148,.025);
+  color: #799080;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+.contact-close:hover,
+.contact-close:focus-visible {
+  color: var(--green);
+  border-color: rgba(117,255,148,.4);
+  outline: none;
+}
+.terminal-contact-form {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+.contact-field {
+  min-width: 0;
+}
+.contact-field-wide {
+  grid-column: 1 / -1;
+}
+.contact-field label {
+  display: block;
+  margin-bottom: 7px;
+  color: #7e9585;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .68rem;
+}
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  border: 1px solid rgba(117,255,148,.14);
+  background: rgba(1,6,3,.68);
+  color: #eaffed;
+  outline: none;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .82rem;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.contact-field input {
+  min-height: 46px;
+  padding: 0 12px;
+}
+.contact-field textarea {
+  min-height: 126px;
+  resize: vertical;
+  padding: 12px;
+  line-height: 1.6;
+}
+.contact-field input:focus,
+.contact-field textarea:focus {
+  border-color: rgba(117,255,148,.48);
+  box-shadow: 0 0 0 3px rgba(117,255,148,.055);
+}
+.contact-field input::placeholder,
+.contact-field textarea::placeholder {
+  color: #425448;
+}
+.contact-counter {
+  margin-top: 5px;
+  text-align: right;
+  color: #53675a;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .62rem;
+}
+.contact-honey {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.contact-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.contact-send {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 0 16px;
+  border: 1px solid var(--green);
+  background: var(--green);
+  color: #041108;
+  font-family: "IBM Plex Mono", monospace;
+  font-weight: 600;
+  cursor: pointer;
+}
+.contact-send:hover,
+.contact-send:focus-visible {
+  box-shadow: 0 0 28px rgba(117,255,148,.2);
+  outline: none;
+}
+.contact-send:disabled {
+  opacity: .55;
+  cursor: wait;
+  box-shadow: none;
+}
+.contact-status {
+  color: #607467;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .67rem;
+}
+.contact-status.success { color: var(--green); }
+.contact-status.error { color: var(--red); }
+
 .site-footer { display:flex; justify-content:space-between; gap:20px; padding:30px 0 40px; border-top:1px solid var(--line); color:#53675a; font-family:"IBM Plex Mono",monospace; font-size:.68rem; }
 .checksum { text-align:right; }.checksum span{color:#7b9180}
 
@@ -950,6 +1098,28 @@ img, svg, canvas {
     min-height: 44px;
     padding: 8px 0;
     font-size: 16px;
+  }
+  .terminal-contact-panel {
+    margin: 0 10px 12px;
+    padding: 14px;
+  }
+  .terminal-contact-form {
+    grid-template-columns: 1fr;
+  }
+  .contact-field-wide,
+  .contact-actions {
+    grid-column: auto;
+  }
+  .contact-field input,
+  .contact-field textarea {
+    font-size: 16px;
+  }
+  .contact-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .contact-send {
+    width: 100%;
   }
   .terminal-cheats {
     justify-content: flex-start;
