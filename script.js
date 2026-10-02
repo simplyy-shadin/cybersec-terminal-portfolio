@@ -364,6 +364,16 @@
   const input = $('#terminalInput');
   const output = $('#terminalOutput');
   const terminalWindow = $('#terminalWindow');
+  const contactPanel = $('#terminalContactPanel');
+  const contactForm = $('#contactForm');
+  const contactClose = $('#contactClose');
+  const contactName = $('#contactName');
+  const contactEmail = $('#contactEmail');
+  const contactMessage = $('#contactMessage');
+  const contactCompany = $('#contactCompany');
+  const contactSend = $('#contactSend');
+  const contactStatus = $('#contactStatus');
+  const contactCount = $('#contactCount');
   const history = [];
   let historyIndex = 0;
 
@@ -385,7 +395,14 @@
     blogs: () => `BLOG-01  Building My Own Cloud SOC from Scratch on AWS\n          Medium · 06 Oct 2025\n\nMore writing: https://medium.com/@shdnkval\nTip: run 'medium' to open the archive.`,
     certs: () => `CompTIA Security+ — IN PREPARATION\nTryHackMe — active hands-on learning profile: simplyy.hacker\n\nCompleted certifications will be listed only with verifiable credential details.`,
     certifications: () => commands.certs(),
-    contact: () => `email     shdnkval@gmail.com\ngithub    github.com/simplyy-shadin\nlinkedin  linkedin.com/in/shadin-k-v-cybersecurity/\n\nCommands: email | github | linkedin`,
+    contact: () => {
+      if (contactPanel) {
+        contactPanel.hidden = false;
+        requestAnimationFrame(() => contactPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }));
+        if (window.matchMedia('(pointer: fine)').matches) setTimeout(() => contactName?.focus(), 250);
+      }
+      return `contact interface mounted\nrecipient: shdnkval@gmail.com\nfill the form above the terminal prompt and press send_message`;
+    },
     socials: () => `GitHub    https://github.com/simplyy-shadin\nLinkedIn  https://www.linkedin.com/in/shadin-k-v-cybersecurity/\nTryHackMe https://tryhackme.com/p/simplyy.hacker\nMedium    https://medium.com/@shdnkval\nX         https://x.com/simplyy_shadin`,
     education: () => `Bachelor of Science (Honors) in Data Science & Artificial Intelligence\nIIT Guwahati — ongoing\n\nHigher Secondary Education — Biology Science\n2022-2024 — 91%`,
     experience: () => `Cybersecurity Intern — Brototype\n2024 -> Present\nHands-on work across SOC, VAPT, application security, cloud security, security tooling and projects.`,
@@ -451,6 +468,82 @@
       addLine(`command not found: ${escapeHTML(base)} — type <span class="green-text">help</span>`, 'error-text');
     }
   };
+
+  const setContactStatus = (message, type = '') => {
+    if (!contactStatus) return;
+    contactStatus.textContent = message;
+    contactStatus.classList.remove('success', 'error');
+    if (type) contactStatus.classList.add(type);
+  };
+
+  contactClose?.addEventListener('click', () => {
+    if (contactPanel) contactPanel.hidden = true;
+    input?.focus();
+  });
+
+  contactMessage?.addEventListener('input', () => {
+    if (contactCount) contactCount.textContent = String(contactMessage.value.length);
+  });
+
+  contactForm?.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!contactForm.reportValidity()) return;
+
+    if (contactCompany?.value.trim()) {
+      contactForm.reset();
+      if (contactCount) contactCount.textContent = '0';
+      setContactStatus('message accepted', 'success');
+      return;
+    }
+
+    const name = contactName?.value.trim() || '';
+    const email = contactEmail?.value.trim() || '';
+    const message = contactMessage?.value.trim() || '';
+
+    if (!name || !email || !message) {
+      setContactStatus('error // complete all required fields', 'error');
+      return;
+    }
+
+    if (contactSend) contactSend.disabled = true;
+    setContactStatus('transmitting // secure relay in progress...');
+
+    try {
+      const response = await fetch('https://formsubmit.co/ajax/shdnkval@gmail.com', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          message,
+          _subject: 'New message from Shadin K V portfolio',
+          _template: 'table',
+          _url: window.location.href
+        })
+      });
+
+      let payload = {};
+      try { payload = await response.json(); } catch (_) {}
+
+      if (!response.ok || payload.success === 'false' || payload.success === false) {
+        throw new Error(payload.message || 'Message relay rejected the request');
+      }
+
+      contactForm.reset();
+      if (contactCount) contactCount.textContent = '0';
+      setContactStatus('sent // message delivered to relay successfully', 'success');
+      addLine('<span class="green-text">[contact]</span> message transmitted successfully.');
+    } catch (error) {
+      console.error('Contact form error:', error);
+      setContactStatus('failed // use the email command as fallback', 'error');
+      addLine('<span class="error-text">[contact]</span> transmission failed — run <span class="green-text">email</span> as fallback.');
+    } finally {
+      if (contactSend) contactSend.disabled = false;
+    }
+  });
 
   if (form && input && output) {
     form.addEventListener('submit', e => {
