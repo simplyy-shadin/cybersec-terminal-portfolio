@@ -89,6 +89,208 @@
     }, 55);
   }
 
+
+  // Interactive pseudo-3D cyber threat sphere
+  const orbCanvas = $('#cyberOrb');
+  const orbWrap = $('#cyberOrbWrap');
+  const orbModeLabel = $('#orbModeLabel');
+  let orbMode = 'network';
+
+  const setOrbMode = mode => {
+    if (!['network', 'threat', 'defense'].includes(mode)) return;
+    orbMode = mode;
+    if (orbWrap) {
+      orbWrap.classList.toggle('mode-threat', mode === 'threat');
+      orbWrap.classList.toggle('mode-defense', mode === 'defense');
+    }
+    $('.orb-control').forEach(btn => btn.classList.toggle('active', btn.dataset.orbMode === mode));
+    if (orbModeLabel) {
+      orbModeLabel.textContent = {
+        network: 'NETWORK MAP',
+        threat: 'THREAT HUNT',
+        defense: 'DEFENSE GRID'
+      }[mode];
+    }
+  };
+
+  $('.orb-control').forEach(btn => btn.addEventListener('click', () => setOrbMode(btn.dataset.orbMode)));
+
+  if (orbCanvas && orbWrap) {
+    const ctx = orbCanvas.getContext('2d');
+    const nodeCount = 108;
+    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+    const nodes = Array.from({ length: nodeCount }, (_, i) => {
+      const y = 1 - (i / (nodeCount - 1)) * 2;
+      const r = Math.sqrt(Math.max(0, 1 - y * y));
+      const theta = goldenAngle * i;
+      return {
+        x: Math.cos(theta) * r,
+        y,
+        z: Math.sin(theta) * r,
+        threat: i % 23 === 0 || i % 37 === 0
+      };
+    });
+
+    const edges = [];
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dz = nodes[i].z - nodes[j].z;
+        if (dx * dx + dy * dy + dz * dz < 0.18 && edges.length < 260) edges.push([i, j]);
+      }
+    }
+
+    let width = 0, height = 0, dpr = 1;
+    let autoY = 0, tiltX = -0.16, tiltY = 0;
+    let targetX = -0.16, targetY = 0;
+    let pulse = 0;
+
+    const resizeOrb = () => {
+      const rect = orbWrap.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = Math.max(1, rect.width);
+      height = Math.max(1, rect.height);
+      orbCanvas.width = Math.round(width * dpr);
+      orbCanvas.height = Math.round(height * dpr);
+      orbCanvas.style.width = width + 'px';
+      orbCanvas.style.height = height + 'px';
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    };
+    resizeOrb();
+    if ('ResizeObserver' in window) new ResizeObserver(resizeOrb).observe(orbWrap);
+    else addEventListener('resize', resizeOrb);
+
+    const rotatePoint = (p, ay, ax) => {
+      const cy = Math.cos(ay), sy = Math.sin(ay);
+      const cx = Math.cos(ax), sx = Math.sin(ax);
+      const x1 = p.x * cy - p.z * sy;
+      const z1 = p.x * sy + p.z * cy;
+      return {
+        x: x1,
+        y: p.y * cx - z1 * sx,
+        z: p.y * sx + z1 * cx
+      };
+    };
+
+    const projectPoint = p => {
+      const perspective = 3.25;
+      const depth = perspective / (perspective - p.z);
+      const scale = Math.min(width, height) * 0.31;
+      return {
+        x: width / 2 + p.x * scale * depth,
+        y: height / 2 + p.y * scale * depth,
+        z: p.z,
+        depth
+      };
+    };
+
+    const drawOrb = () => {
+      ctx.clearRect(0, 0, width, height);
+      autoY += orbMode === 'threat' ? 0.0052 : 0.0032;
+      pulse += 0.045;
+      tiltX += (targetX - tiltX) * 0.055;
+      tiltY += (targetY - tiltY) * 0.055;
+
+      const transformed = nodes.map(n => {
+        const r = rotatePoint(n, autoY + tiltY, tiltX);
+        return { ...projectPoint(r), threat: n.threat };
+      });
+
+      ctx.lineWidth = 0.7;
+      for (const [a, b] of edges) {
+        const p1 = transformed[a], p2 = transformed[b];
+        const front = Math.max(0.08, ((p1.z + p2.z) / 2 + 1) / 2);
+        if (orbMode === 'threat' && (p1.threat || p2.threat)) ctx.strokeStyle = `rgba(255,107,120,${0.18 + front * 0.22})`;
+        else if (orbMode === 'defense') ctx.strokeStyle = `rgba(107,200,255,${0.07 + front * 0.18})`;
+        else ctx.strokeStyle = `rgba(117,255,148,${0.06 + front * 0.18})`;
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+      }
+
+      if (orbMode === 'defense') {
+        ctx.save();
+        ctx.translate(width / 2, height / 2);
+        ctx.strokeStyle = 'rgba(107,200,255,.18)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < 3; i++) {
+          ctx.beginPath();
+          ctx.ellipse(0, 0, Math.min(width,height) * (.27 + i * .045), Math.min(width,height) * (.09 + i * .017), autoY * (i % 2 ? -1 : 1), 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      transformed
+        .map((p, i) => ({ ...p, i }))
+        .sort((a, b) => a.z - b.z)
+        .forEach(p => {
+          const alpha = 0.2 + ((p.z + 1) / 2) * 0.8;
+          const threatActive = orbMode === 'threat' && p.threat;
+          const radius = (threatActive ? 2.8 : 1.4) * p.depth;
+
+          if (threatActive) {
+            ctx.strokeStyle = `rgba(255,107,120,${0.28 + Math.sin(pulse + p.i) * 0.12})`;
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, 6 + Math.sin(pulse + p.i) * 2, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.fillStyle = `rgba(255,107,120,${alpha})`;
+          } else if (orbMode === 'defense') {
+            ctx.fillStyle = `rgba(107,200,255,${alpha * .9})`;
+          } else {
+            ctx.fillStyle = `rgba(117,255,148,${alpha})`;
+          }
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, Math.max(0.8, radius), 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+      const core = 5 + Math.sin(pulse) * 1.4;
+      ctx.fillStyle = orbMode === 'threat' ? 'rgba(255,107,120,.85)' : orbMode === 'defense' ? 'rgba(107,200,255,.85)' : 'rgba(117,255,148,.85)';
+      ctx.beginPath();
+      ctx.arc(width / 2, height / 2, core, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) requestAnimationFrame(drawOrb);
+    };
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) drawOrb();
+    else requestAnimationFrame(drawOrb);
+
+    orbWrap.addEventListener('pointermove', e => {
+      const rect = orbWrap.getBoundingClientRect();
+      const nx = (e.clientX - rect.left) / rect.width - 0.5;
+      const ny = (e.clientY - rect.top) / rect.height - 0.5;
+      targetY = nx * 0.7;
+      targetX = -0.16 + ny * 0.48;
+    });
+    orbWrap.addEventListener('pointerleave', () => {
+      targetX = -0.16;
+      targetY = 0;
+    });
+  }
+
+  // Pointer-reactive project cards
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    $('.tilt-card').forEach(card => {
+      card.addEventListener('pointermove', e => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.setProperty('--ry', `${x * 7}deg`);
+        card.style.setProperty('--rx', `${y * -6}deg`);
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.setProperty('--ry', '0deg');
+        card.style.setProperty('--rx', '0deg');
+      });
+    });
+  }
+
   // Terminal
   const form = $('#terminalForm');
   const input = $('#terminalInput');
@@ -107,7 +309,7 @@
   };
 
   const commands = {
-    help: () => `Available commands:\n\n  about       short profile\n  whoami      identity + current focus\n  skills      capability summary\n  projects    selected project index\n  contact     contact channels\n  socials     public profiles\n  education   education summary\n  experience  current experience\n  github      open GitHub\n  linkedin    open LinkedIn\n  tryhackme   open TryHackMe\n  email       open email client\n  resume      resume/CV status\n  clear       clear terminal\n  banner      show terminal banner\n\nTip: type 'open github' or 'open linkedin'.`,
+    help: () => `Available commands:\n\n  about       short profile\n  whoami      identity + current focus\n  skills      capability summary\n  projects    selected project index\n  contact     contact channels\n  socials     public profiles\n  education   education summary\n  experience  current experience\n  github      open GitHub\n  linkedin    open LinkedIn\n  tryhackme   open TryHackMe\n  email       open email client\n  resume      resume/CV status\n  scan        run visual threat scan\n  defend      activate defense grid\n  matrix      boost background matrix\n  trace       simulated safe route trace\n  clear       clear terminal\n  banner      show terminal banner\n\nTip: type 'open github' or 'open linkedin'.`,
     about: () => `Shadin K V — cybersecurity student and builder focused on Security Engineering, AppSec/Product Security, VAPT, SOC/detection, cloud security and automation.`,
     whoami: () => `user: Shadin K V\nrole: Cybersecurity Intern / Security Engineering learner\nprimary_track: Security Engineering -> AppSec/Product Security -> Cloud/AI Security\nsecondary_tracks: VAPT | SOC | Detection Engineering | Cloud Security\nlocation: Kerala, India`,
     skills: () => `appsec: OWASP, Burp Suite, ZAP, threat modeling, API security, secure auth\nvapt: Nmap, Nuclei, ffuf, Nikto, sqlmap, XSStrike, recon, reporting\ndevsecops: GitHub Actions, Semgrep, Gitleaks, Trivy, Checkov, SBOM, containers, Kubernetes\nsoc: Wazuh, Suricata, Elastic/Kibana, SIEM rules, log analysis, SOAR workflows\ncloud: AWS EC2/VPC/CloudTrail/Lambda/WAF concepts\nengineering: Python, FastAPI, Flask, REST, SQLite, Linux, Docker, Git`,
@@ -117,6 +319,29 @@
     education: () => `Bachelor of Science (Honors) in Data Science & Artificial Intelligence\nIIT Guwahati — ongoing\n\nHigher Secondary Education — Biology Science\n2022-2024 — 91%`,
     experience: () => `Cybersecurity Intern — Brototype\n2024 -> Present\nHands-on work across SOC, VAPT, application security, cloud security, security tooling and projects.`,
     resume: () => `CV variants available for Security Engineering/AppSec, VAPT, SOC and general cybersecurity positioning.\nAdd downloadable PDF links here when you publish your final CV files.`,
+    scan: () => {
+      setOrbMode('threat');
+      orbWrap?.classList.remove('scan-flash');
+      void orbWrap?.offsetWidth;
+      orbWrap?.classList.add('scan-flash');
+      setTimeout(() => addLine('<span class="amber-text">[scan]</span> enumerating visible portfolio attack surface...'), 180);
+      setTimeout(() => addLine('<span class="amber-text">[scan]</span> correlating telemetry: AppSec / VAPT / SOC / Cloud'), 520);
+      setTimeout(() => addLine('<span class="green-text">[result]</span> demo scan complete — no real target was contacted.'), 950);
+      return `visual threat scan initialized — 3D telemetry switched to THREAT HUNT`;
+    },
+    defend: () => {
+      setOrbMode('defense');
+      orbWrap?.classList.add('scan-flash');
+      setTimeout(() => orbWrap?.classList.remove('scan-flash'), 900);
+      return `defense grid active — monitoring nodes and containment rings enabled`;
+    },
+    matrix: () => {
+      document.body.classList.toggle('matrix-boost');
+      return document.body.classList.contains('matrix-boost')
+        ? `matrix intensity: BOOSTED`
+        : `matrix intensity: NORMAL`;
+    },
+    trace: () => `TRACE (simulation only)\nvisitor -> portfolio edge -> project archive -> terminal shell\nlatency: 13ms | encryption: aesthetic-grade | status: CONNECTED`,
     banner: () => `███████╗██╗  ██╗██╗   ██╗\n██╔════╝██║ ██╔╝██║   ██║\n███████╗█████╔╝ ██║   ██║\n╚════██║██╔═██╗ ╚██╗ ██╔╝\n███████║██║  ██╗ ╚████╔╝\n╚══════╝╚═╝  ╚═╝  ╚═══╝\n  security through engineering`,
   };
 
@@ -169,7 +394,7 @@
       if (e.key === 'ArrowDown') { e.preventDefault(); if (historyIndex < history.length) input.value = history[++historyIndex] || ''; }
       if (e.key === 'Tab') {
         e.preventDefault();
-        const options = [...Object.keys(commands), ...Object.keys(links), 'socials', 'education', 'experience'];
+        const options = [...new Set([...Object.keys(commands), ...Object.keys(links), 'socials', 'education', 'experience', 'scan', 'defend', 'matrix', 'trace'])];
         const matches = options.filter(cmd => cmd.startsWith(input.value.toLowerCase()));
         if (matches.length === 1) input.value = matches[0];
       }
