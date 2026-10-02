@@ -106,3 +106,19 @@ Only completed credentials should be presented as earned. In-progress study shou
 ### TryHackMe badge
 The TryHackMe block uses the public badge image for `simplyy.hacker` and links to:
 `https://tryhackme.com/p/simplyy.hacker`
+
+
+## Terminal contact form
+
+Typing `contact` in the portfolio terminal opens an embedded contact form with:
+- Name
+- Email
+- Message
+- Send button
+
+Submissions are sent through FormSubmit's AJAX relay to `shdnkval@gmail.com`.
+
+### One-time activation
+FormSubmit requires the destination email to be activated once. Submit the form once from the live portfolio, then open the activation email sent to `shdnkval@gmail.com` and confirm it. After activation, future portfolio submissions are delivered to that inbox.
+
+If the relay fails, the terminal's existing `email` command remains available as a fallback.
