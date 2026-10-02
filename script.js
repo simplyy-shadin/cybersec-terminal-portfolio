@@ -25,6 +25,28 @@
     boot.classList.add('done');
   }
 
+  // Mobile navigation
+  const navToggle = $('#navToggle');
+  const primaryNav = $('#primaryNav');
+  const closeNav = () => {
+    primaryNav?.classList.remove('open');
+    navToggle?.setAttribute('aria-expanded', 'false');
+    navToggle?.setAttribute('aria-label', 'Open navigation');
+  };
+  navToggle?.addEventListener('click', () => {
+    const open = !primaryNav?.classList.contains('open');
+    primaryNav?.classList.toggle('open', open);
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
+  });
+  primaryNav?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeNav));
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeNav();
+  });
+  addEventListener('resize', () => {
+    if (innerWidth > 860) closeNav();
+  });
+
   // Typewriter role loop
   const typeEl = $('#typewriter');
   const roles = [
@@ -445,7 +467,11 @@
         if (matches.length === 1) input.value = matches[0];
       }
     });
-    terminalWindow?.addEventListener('click', () => input.focus());
+    terminalWindow?.addEventListener('click', event => {
+      if (window.matchMedia('(pointer: fine)').matches || event.target === input || event.target.closest('.terminal-input-row')) {
+        input.focus();
+      }
+    });
     document.addEventListener('keydown', e => {
       if (e.ctrlKey && e.key.toLowerCase() === 'l') { e.preventDefault(); output.innerHTML = ''; input.focus(); }
     });
