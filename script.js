@@ -359,6 +359,19 @@
     console.warn('3D card tilt disabled:', error);
   }
 
+  // Contact hub
+  const copyEmail = $('#copyEmail');
+  copyEmail?.addEventListener('click', async () => {
+    const email = copyEmail.dataset.copy || 'shdnkval@gmail.com';
+    try {
+      await navigator.clipboard.writeText(email);
+      copyEmail.textContent = 'copied ✓';
+      setTimeout(() => { copyEmail.textContent = 'copy_email'; }, 1400);
+    } catch (_) {
+      window.prompt('Copy email:', email);
+    }
+  });
+
   // Terminal
   const form = $('#terminalForm');
   const input = $('#terminalInput');
