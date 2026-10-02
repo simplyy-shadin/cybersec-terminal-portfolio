@@ -393,7 +393,7 @@
     skills: () => `appsec: OWASP, Burp Suite, ZAP, threat modeling, API security, secure auth\nvapt: Nmap, Nuclei, ffuf, Nikto, sqlmap, XSStrike, recon, reporting\ndevsecops: GitHub Actions, Semgrep, Gitleaks, Trivy, Checkov, SBOM, containers, Kubernetes\nsoc: Wazuh, Suricata, Elastic/Kibana, SIEM rules, log analysis, SOAR workflows\ncloud: AWS EC2/VPC/CloudTrail/Lambda/WAF concepts\nengineering: Python, FastAPI, Flask, REST, SQLite, Linux, Docker, Git`,
     projects: () => `PX-01  VAPTForge\nPX-02  SecureFlow DevSecOps\nPX-03  Cloud SOC on AWS\nPX-04  File Integrity + Jira Automation\nPX-05  Network Packet Visualizer\n\nRun 'github' to explore the repositories.`,
     blogs: () => `BLOG-01  Building My Own Cloud SOC from Scratch on AWS\n          Medium · 06 Oct 2025\n\nMore writing: https://medium.com/@shdnkval\nTip: run 'medium' to open the archive.`,
-    certs: () => `CompTIA Security+ — IN PREPARATION\nTryHackMe — active hands-on learning profile: simplyy.hacker\n\nCompleted certifications will be listed only with verifiable credential details.`,
+    certs: () => `COMPLETED CREDENTIALS (8)\n\n01  TryHackMe — Pre Security Learning Path — 17 Mar 2026\n02  Deloitte / Forage — Cyber Job Simulation — 04 Mar 2026\n03  Basel Institute on Governance — Open-source Intelligence — 04 Aug 2025\n04  CENTRI — Introduction to Bash — 13 Mar 2025\n05  CENTRI — Introduction to Network Analysis — 08 Jan 2025\n06  CENTRI — Introduction to OSINT — 28 Dec 2024\n07  CENTRI — Introduction to Dark Web Operations — 17 Dec 2024\n08  CENTRI — Introduction to Python — 21 Nov 2024\n\nIN PREPARATION\nCompTIA Security+\n\nTryHackMe profile: simplyy.hacker`,
     certifications: () => commands.certs(),
     contact: () => {
       if (contactPanel) {
