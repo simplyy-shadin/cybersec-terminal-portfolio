@@ -167,6 +167,32 @@ main, .site-footer { position: relative; z-index: 2; }
 .btn-primary { background: var(--green); color: #061109; box-shadow: 0 0 28px rgba(117,255,148,.14); }
 .btn-primary:hover { box-shadow: 0 0 32px rgba(117,255,148,.3); }
 .btn-ghost { background: rgba(117,255,148,.03); color: var(--green); }
+.btn-hacker {
+  position: relative;
+  overflow: hidden;
+  border-color: rgba(255,107,120,.34);
+  color: #ff8992;
+  background:
+    linear-gradient(90deg, rgba(255,107,120,.055), rgba(117,255,148,.035)),
+    rgba(5,10,7,.72);
+}
+.btn-hacker::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 -35%;
+  width: 28%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.08), transparent);
+  transform: skewX(-18deg);
+  transition: left .45s ease;
+}
+.btn-hacker:hover::before { left: 120%; }
+.btn-hacker:hover {
+  border-color: rgba(255,107,120,.6);
+  box-shadow: 0 0 28px rgba(255,107,120,.12);
+}
+.nav-hacker {
+  color: #ff8992 !important;
+}
 .signal-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
 .signal-row span,.project-stack span {
   border: 1px solid rgba(117,255,148,.14);
