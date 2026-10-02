@@ -4,6 +4,7 @@
 
   // Boot sequence
   const boot = $('#boot');
+  window.setTimeout(() => boot?.classList.add('done'), 3600);
   const bootLog = $('#bootLog');
   const bootLines = [
     'initializing portfolio kernel...',
