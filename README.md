@@ -122,3 +122,23 @@ Submissions are sent through FormSubmit's AJAX relay to `shdnkval@gmail.com`.
 FormSubmit requires the destination email to be activated once. Submit the form once from the live portfolio, then open the activation email sent to `shdnkval@gmail.com` and confirm it. After activation, future portfolio submissions are delivered to that inbox.
 
 If the relay fails, the terminal's existing `email` command remains available as a fallback.
+
+
+## Hacker Mode mini CTF
+
+The portfolio includes a dedicated browser-only challenge page at `hacker-mode.html`.
+
+Visitors can enter through:
+- the **Enter Hacker Mode** hero button
+- the `hacker_mode` navigation entry
+- terminal commands `hacker` or `ctf`
+
+The mini CTF contains four intentionally simulated challenges:
+1. Recon / information disclosure
+2. Broken access control / IDOR
+3. Client-side authorization trust
+4. SOC log analysis
+
+All challenges execute entirely in the visitor's browser. The page explicitly limits scope to the simulated lab; the real portfolio, GitHub Pages, linked repositories, FormSubmit, TryHackMe, and other third-party services are out of scope.
+
+Progress and hints are saved locally in the browser. Each solved challenge is worth 250 points and each first-use hint costs 50 points. Completing all four unlocks a local **SKV CTF FINISHER** achievement badge. This is a portfolio game achievement, not a formal certification.
