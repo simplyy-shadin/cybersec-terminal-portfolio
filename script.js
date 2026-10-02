@@ -44,7 +44,7 @@
     if (event.key === 'Escape') closeNav();
   });
   addEventListener('resize', () => {
-    if (innerWidth > 860) closeNav();
+    if (innerWidth > 980) closeNav();
   });
 
   // Typewriter role loop
