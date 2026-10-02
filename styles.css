@@ -123,6 +123,20 @@ button, input { font: inherit; }
 }
 .glitch:hover::before { opacity: .45; color: #50ffd7; transform: translate(2px,-1px); clip-path: inset(15% 0 55% 0); }
 .glitch:hover::after { opacity: .35; color: #ff4f8f; transform: translate(-2px,2px); clip-path: inset(60% 0 8% 0); }
+.alias-line {
+  margin: 14px 0 -8px;
+  color: #607768;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .8rem;
+  letter-spacing: .06em;
+  text-transform: lowercase;
+}
+.alias-line span,
+.alias-value {
+  color: var(--green);
+  text-shadow: 0 0 14px rgba(117,255,148,.22);
+}
+
 .hero-role {
   margin: 28px 0 18px;
   font-family: "IBM Plex Mono", monospace;
