@@ -261,12 +261,26 @@ main, .site-footer { position: relative; z-index: 2; }
 .site-footer { display:flex; justify-content:space-between; gap:20px; padding:30px 0 40px; border-top:1px solid var(--line); color:#53675a; font-family:"IBM Plex Mono",monospace; font-size:.68rem; }
 .checksum { text-align:right; }.checksum span{color:#7b9180}
 
-.boot-screen { position:fixed; inset:0; z-index:9999; display:flex; align-items:flex-end; padding:32px; background:#020403; transition:opacity .5s ease, visibility .5s ease; }
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: flex-end;
+  padding: 32px;
+  background: #020403;
+  pointer-events: none;
+  animation: bootFailsafe 2.8s 1.2s forwards;
+  transition: opacity .45s ease, visibility .45s ease;
+}
 .boot-screen.done { opacity:0; visibility:hidden; }
+@keyframes bootFailsafe {
+  to { opacity: 0; visibility: hidden; }
+}
 .boot-log { font-family:"IBM Plex Mono",monospace; color:var(--green); font-size:.78rem; line-height:1.7; }
 .boot-log div::before { content:"[ OK ] "; color:#b7ffc6; }
 
-.reveal { opacity:0; transform:translateY(24px); transition:opacity .75s ease, transform .75s ease; }
+.reveal { opacity:1; transform:none; transition:opacity .75s ease, transform .75s ease; }
 .reveal.visible { opacity:1; transform:none; }
 
 
