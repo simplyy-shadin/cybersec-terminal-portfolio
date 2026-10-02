@@ -526,7 +526,7 @@ img, svg, canvas {
   }
 }
 
-@media (max-width: 860px) {
+@media (max-width: 980px) {
   .site-header {
     height: 64px;
     grid-template-columns: minmax(0,1fr) auto auto;
