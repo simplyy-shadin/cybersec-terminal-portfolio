@@ -83,3 +83,26 @@ In GitHub:
 - `script.js` — boot animation, Matrix effect and terminal commands
 
 The `resume` terminal command intentionally contains a placeholder message until final CV PDFs are published in the repository.
+
+
+## Adding blogs and certifications
+
+The portfolio now includes dedicated **Security Blogs & Write-ups** and **Certifications & Hands-on Learning** sections.
+
+### Add a new blog
+Open `index.html`, find the `#blogs` section, duplicate the existing `.blog-card` block, and update:
+- category/tag
+- publication date
+- article title
+- short description
+- topic stack
+- article URL
+
+### Add a completed certification
+Open `index.html`, find the `#certifications` section, duplicate a `.credential-card`, then add the issuer, certification name, issue date, credential ID (when public), and verification link.
+
+Only completed credentials should be presented as earned. In-progress study should keep an explicit **IN PREPARATION** status.
+
+### TryHackMe badge
+The TryHackMe block uses the public badge image for `simplyy.hacker` and links to:
+`https://tryhackme.com/p/simplyy.hacker`
