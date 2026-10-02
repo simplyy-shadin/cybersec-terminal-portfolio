@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=6" />
+  <link rel="stylesheet" href="styles.css?v=7" />
 </head>
 <body>
   <canvas id="matrix" aria-hidden="true"></canvas>
@@ -31,6 +31,8 @@
       <a href="#about">about</a>
       <a href="#projects">projects</a>
       <a href="#skills">skills</a>
+      <a href="#blogs">blogs</a>
+      <a href="#certifications">certs</a>
       <a href="#timeline">timeline</a>
       <a href="#terminal">terminal</a>
     </nav>
@@ -204,9 +206,95 @@
       </div>
     </section>
 
+    <section id="blogs" class="content-section section-shell reveal">
+      <div class="section-heading">
+        <p>04 // field notes</p>
+        <h2>Security blogs & write-ups</h2>
+        <p class="section-subcopy">Long-form notes from projects, labs and security engineering experiments.</p>
+      </div>
+      <div class="blog-grid">
+        <!-- Duplicate a .blog-card block below when publishing a new article. -->
+        <article class="blog-card blog-featured">
+          <div class="blog-meta">
+            <span class="tag blue">CLOUD SOC</span>
+            <time datetime="2025-10-06">06 OCT 2025</time>
+          </div>
+          <h3>Building My Own Cloud SOC from Scratch on AWS</h3>
+          <p>
+            A practical walkthrough of building a cloud SOC with Wazuh, Suricata, ModSecurity,
+            AWS Lambda, Shuffle SOAR and Elastic — including detection, enrichment and automated response.
+          </p>
+          <div class="project-stack">
+            <span>AWS</span><span>Wazuh</span><span>Suricata</span><span>SOAR</span><span>Detection Engineering</span>
+          </div>
+          <a class="project-link" href="https://medium.com/@shdnkval/%EF%B8%8F-building-my-own-cloud-soc-from-scratch-on-aws-786f3c5b61e4" target="_blank" rel="noreferrer">read on Medium ↗</a>
+        </article>
+
+        <article class="blog-card blog-index-card">
+          <div>
+            <div class="blog-meta"><span class="tag muted">WRITING ARCHIVE</span><span>MEDIUM</span></div>
+            <h3>More security notes</h3>
+            <p>
+              I publish project breakdowns, lab lessons and practical cybersecurity notes as I build and test new systems.
+            </p>
+          </div>
+          <div class="blog-terminal-preview" aria-hidden="true">
+            <span>$ ls ~/field-notes</span>
+            <span>cloud-soc.md</span>
+            <span>appsec/</span>
+            <span>vapt/</span>
+            <span>detection/</span>
+          </div>
+          <a class="project-link" href="https://medium.com/@shdnkval" target="_blank" rel="noreferrer">open Medium profile ↗</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="certifications" class="content-section section-shell reveal">
+      <div class="section-heading">
+        <p>05 // credentials</p>
+        <h2>Certifications & hands-on learning</h2>
+        <p class="section-subcopy">Completed credentials are listed only when verifiable; active preparation is labeled separately.</p>
+      </div>
+
+      <div class="credentials-grid">
+        <article class="credential-card">
+          <div class="credential-status in-progress"><span></span> IN PREPARATION</div>
+          <div class="credential-icon" aria-hidden="true">SEC+</div>
+          <div>
+            <p class="credential-issuer">CompTIA</p>
+            <h3>Security+</h3>
+            <p>Currently preparing for the Security+ certification as part of my core security-engineering foundation.</p>
+          </div>
+        </article>
+
+        <article class="credential-card credential-placeholder">
+          <div class="credential-status"><span></span> VERIFIED ONLY</div>
+          <div class="credential-icon" aria-hidden="true">CERT</div>
+          <div>
+            <p class="credential-issuer">Credential archive</p>
+            <h3>More certifications</h3>
+            <p>New certifications will be added here with issuer, credential ID/date and verification link after completion.</p>
+          </div>
+        </article>
+
+        <article class="tryhackme-card">
+          <div class="thm-copy">
+            <p class="credential-issuer">HANDS-ON PLATFORM</p>
+            <h3>TryHackMe // simplyy.hacker</h3>
+            <p>Practical cybersecurity labs and guided learning across offensive security, defensive security and core fundamentals.</p>
+            <a class="project-link" href="https://tryhackme.com/p/simplyy.hacker" target="_blank" rel="noreferrer">open TryHackMe profile ↗</a>
+          </div>
+          <a class="thm-badge-link" href="https://tryhackme.com/p/simplyy.hacker" target="_blank" rel="noreferrer" aria-label="Open simplyy.hacker on TryHackMe">
+            <img src="https://tryhackme-badges.s3.amazonaws.com/simplyy.hacker.png" width="329" height="88" loading="lazy" decoding="async" alt="TryHackMe badge for simplyy.hacker" />
+          </a>
+        </article>
+      </div>
+    </section>
+
     <section id="timeline" class="content-section section-shell reveal">
       <div class="section-heading">
-        <p>04 // activity log</p>
+        <p>06 // activity log</p>
         <h2>Experience & education</h2>
       </div>
       <div class="timeline">
@@ -227,7 +315,7 @@
 
     <section id="terminal" class="content-section section-shell terminal-section reveal">
       <div class="section-heading">
-        <p>05 // secure channel</p>
+        <p>07 // secure channel</p>
         <h2>Interactive terminal</h2>
         <p class="terminal-hint">Type <code>help</code> to discover commands. Contact details live here by design.</p>
       </div>
@@ -255,6 +343,6 @@
     <p class="checksum">SHA256: <span id="fakeChecksum">GENERATING...</span></p>
   </footer>
 
-  <script src="script.js?v=6"></script>
+  <script src="script.js?v=7"></script>
 </body>
 </html>
