@@ -272,6 +272,7 @@
       targetX = -0.16;
       targetY = 0;
     });
+    }
   }
 
   // Pointer-reactive project cards
