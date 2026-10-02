@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Hacker Mode — a browser-only cybersecurity mini CTF by Shadin K V (aka simplyy-hacker)." />
+  <meta name="theme-color" content="#030705" />
+  <title>Hacker Mode // simplyy-hacker</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="hacker-mode.css?v=1" />
+</head>
+<body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <header class="lab-header">
+    <a class="lab-brand" href="index.html"><span>[SKV]</span> ~/hacker-mode</a>
+    <div class="lab-status"><i></i> SANDBOX ONLINE</div>
+    <a class="back-link" href="index.html">← portfolio</a>
+  </header>
+
+  <main class="lab-shell">
+    <section class="lab-hero">
+      <div>
+        <p class="eyebrow">SIMPLYY-HACKER // MINI CTF</p>
+        <h1>ENTER<br /><span>HACKER MODE</span></h1>
+        <p class="hero-copy">A small browser-only pentest game for curious security people. Find the flaws, submit the answers, and earn the local <b>SKV CTF FINISHER</b> badge.</p>
+      </div>
+      <div class="score-board" aria-label="Challenge score">
+        <div><span>score</span><strong id="scoreValue">0</strong><small>/ 1000</small></div>
+        <div><span>solved</span><strong id="solvedValue">0</strong><small>/ 4</small></div>
+        <div><span>rank</span><strong id="rankValue">RECON</strong></div>
+      </div>
+    </section>
+
+    <section class="scope-panel">
+      <div>
+        <p class="eyebrow">00 // RULES OF ENGAGEMENT</p>
+        <h2>Scope before skill.</h2>
+      </div>
+      <div class="scope-copy">
+        <p><b>In scope:</b> only the simulated challenges on this Hacker Mode page.</p>
+        <p><b>Out of scope:</b> the real portfolio, GitHub Pages infrastructure, FormSubmit, TryHackMe, linked repositories, or any third-party service.</p>
+        <p>No network scanning is required. Everything needed to solve the game is already in your browser.</p>
+      </div>
+    </section>
+
+    <section class="challenge-grid" id="challengeGrid">
+      <article class="challenge-card" data-challenge="recon">
+        <div class="challenge-head">
+          <div><span class="challenge-no">01</span><span class="difficulty easy">EASY</span></div>
+          <span class="challenge-state" data-state>OPEN</span>
+        </div>
+        <p class="eyebrow">RECON / INFORMATION DISCLOSURE</p>
+        <h2>Ghost Header</h2>
+        <p>A developer left an internal path in a debug response. Inspect the simulated response and identify the hidden path.</p>
+        <div class="lab-console">
+          <div class="console-bar">HTTP/1.1 200 OK</div>
+          <pre id="reconConsole">server: skv-lab
+content-type: text/html
+x-powered-by: curiosity
+
+[ response body minimized ]</pre>
+        </div>
+        <button class="lab-action secondary" type="button" id="inspectHeaders">inspect_debug_headers()</button>
+        <form class="answer-form" data-form="recon">
+          <label for="reconAnswer">hidden_path</label>
+          <div><input id="reconAnswer" autocomplete="off" placeholder="/path/to/file" /><button type="submit">submit</button></div>
+        </form>
+        <div class="challenge-tools">
+          <button type="button" class="hint-btn" data-hint="recon">hint (-50)</button>
+          <span class="feedback" data-feedback="recon"></span>
+        </div>
+        <div class="hint" data-hintbox="recon" hidden>Look for a non-standard header that appears after inspection.</div>
+      </article>
+
+      <article class="challenge-card" data-challenge="idor">
+        <div class="challenge-head">
+          <div><span class="challenge-no">02</span><span class="difficulty medium">MEDIUM</span></div>
+          <span class="challenge-state" data-state>OPEN</span>
+        </div>
+        <p class="eyebrow">BROKEN ACCESS CONTROL</p>
+        <h2>Object Hopper</h2>
+        <p>The mock profile endpoint trusts a numeric object ID. Enumerate a very small local range and locate the record that should not be exposed.</p>
+        <div class="mock-api">
+          <label for="profileId">GET /api/profile?id=</label>
+          <div><input id="profileId" type="number" min="1001" max="1010" value="1001" /><button type="button" id="fetchProfile">fetch</button></div>
+          <pre id="profileResult">{"id":1001,"user":"guest","team":"visitor"}</pre>
+        </div>
+        <form class="answer-form" data-form="idor">
+          <label for="idorAnswer">exposed_object_id</label>
+          <div><input id="idorAnswer" inputmode="numeric" autocomplete="off" placeholder="100?" /><button type="submit">submit</button></div>
+        </form>
+        <div class="challenge-tools">
+          <button type="button" class="hint-btn" data-hint="idor">hint (-50)</button>
+          <span class="feedback" data-feedback="idor"></span>
+        </div>
+        <div class="hint" data-hintbox="idor" hidden>Only IDs 1001–1010 exist in this simulation. You do not need automation.</div>
+      </article>
+
+      <article class="challenge-card" data-challenge="auth">
+        <div class="challenge-head">
+          <div><span class="challenge-no">03</span><span class="difficulty medium">MEDIUM</span></div>
+          <span class="challenge-state" data-state>OPEN</span>
+        </div>
+        <p class="eyebrow">CLIENT-SIDE TRUST</p>
+        <h2>Role Reversal</h2>
+        <p>This mock app accepts a client-controlled role token. Decode the payload, change the role, then submit the modified token to reveal the weakness.</p>
+        <div class="token-lab">
+          <label for="roleToken">role_token (base64 JSON)</label>
+          <textarea id="roleToken" rows="3">eyJ1c2VyIjoidmlzaXRvciIsInJvbGUiOiJndWVzdCJ9</textarea>
+          <div class="token-actions">
+            <button type="button" class="lab-action secondary" id="decodeToken">decode</button>
+            <button type="button" class="lab-action" id="verifyToken">verify_access</button>
+          </div>
+          <pre id="tokenResult">waiting for token...</pre>
+        </div>
+        <form class="answer-form" data-form="auth">
+          <label for="authAnswer">vulnerability_name</label>
+          <div><input id="authAnswer" autocomplete="off" placeholder="what trust mistake is this?" /><button type="submit">submit</button></div>
+        </form>
+        <div class="challenge-tools">
+          <button type="button" class="hint-btn" data-hint="auth">hint (-50)</button>
+          <span class="feedback" data-feedback="auth"></span>
+        </div>
+        <div class="hint" data-hintbox="auth" hidden>The server should never trust authorization data solely because the browser sent it.</div>
+      </article>
+
+      <article class="challenge-card" data-challenge="soc">
+        <div class="challenge-head">
+          <div><span class="challenge-no">04</span><span class="difficulty hard">HARD</span></div>
+          <span class="challenge-state" data-state>OPEN</span>
+        </div>
+        <p class="eyebrow">SOC / LOG ANALYSIS</p>
+        <h2>Hydra in the Noise</h2>
+        <p>One source is repeatedly hitting a login endpoint with an automation signature. Identify the attacker IP from the sample telemetry.</p>
+        <div class="log-viewer" aria-label="Sample web logs">
+          <pre>10.0.8.14 - GET  /health     200 UA="ELB-HealthChecker/2.0"
+10.0.5.33 - GET  /login.php  200 UA="Mozilla/5.0"
+10.0.9.77 - POST /login.php  200 UA="Mozilla/5.0 (Hydra)"
+10.0.3.11 - GET  /assets/app.js 200 UA="Mozilla/5.0"
+10.0.9.77 - POST /login.php  200 UA="Mozilla/5.0 (Hydra)"
+10.0.4.19 - GET  /login.php  200 UA="Mozilla/5.0"
+10.0.9.77 - POST /login.php  200 UA="Mozilla/5.0 (Hydra)"</pre>
+        </div>
+        <form class="answer-form" data-form="soc">
+          <label for="socAnswer">attacker_ip</label>
+          <div><input id="socAnswer" autocomplete="off" inputmode="decimal" placeholder="10.0.x.x" /><button type="submit">submit</button></div>
+        </form>
+        <div class="challenge-tools">
+          <button type="button" class="hint-btn" data-hint="soc">hint (-50)</button>
+          <span class="feedback" data-feedback="soc"></span>
+        </div>
+        <div class="hint" data-hintbox="soc" hidden>Correlate repeated POST /login.php requests with the unusual User-Agent.</div>
+      </article>
+    </section>
+
+    <section class="reward-panel" id="rewardPanel">
+      <div>
+        <p class="eyebrow">05 // REWARD VAULT</p>
+        <h2 id="rewardTitle">Vault locked.</h2>
+        <p id="rewardCopy">Solve all four challenges to unlock your local completion badge.</p>
+      </div>
+      <div class="badge locked" id="completionBadge" aria-live="polite">
+        <span class="badge-top">SIMPLYY-HACKER LAB</span>
+        <strong>SKV CTF<br />FINISHER</strong>
+        <span id="badgeScore">0000 / 1000</span>
+        <small id="completionCode">LOCKED</small>
+      </div>
+      <div class="reward-actions">
+        <button type="button" id="copyResult" disabled>copy achievement</button>
+        <button type="button" id="resetProgress" class="danger">reset progress</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="lab-footer">
+    <span>simplyy-hacker // client-side sandbox</span>
+    <span>no real systems harmed.</span>
+  </footer>
+
+  <script src="hacker-mode.js?v=1"></script>
+</body>
+</html>
