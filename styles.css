@@ -678,6 +678,30 @@ main, .site-footer { position: relative; z-index: 2; }
   color: var(--green);
   margin-bottom: 4px;
 }
+.credential-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.credential-summary > div {
+  padding: 14px 16px;
+  border: 1px solid rgba(117,255,148,.12);
+  background: rgba(6,13,8,.66);
+  font-family: "IBM Plex Mono", monospace;
+}
+.credential-summary strong {
+  display: block;
+  color: var(--green);
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+.credential-summary span {
+  display: block;
+  margin-top: 3px;
+  color: #64786a;
+  font-size: .65rem;
+}
 .credentials-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0,1fr));
@@ -707,6 +731,13 @@ main, .site-footer { position: relative; z-index: 2; }
   height: 7px;
   border-radius: 50%;
   background: #718076;
+}
+.credential-status.completed {
+  color: var(--green);
+}
+.credential-status.completed span {
+  background: var(--green);
+  box-shadow: 0 0 12px rgba(117,255,148,.42);
 }
 .credential-status.in-progress {
   color: var(--amber);
@@ -743,6 +774,35 @@ main, .site-footer { position: relative; z-index: 2; }
   font-family: "IBM Plex Mono", monospace;
   font-size: .68rem;
   letter-spacing: .07em;
+}
+.credential-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 12px;
+  margin-top: 14px;
+  color: #6d8272;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .64rem;
+}
+.credential-meta span {
+  padding: 3px 6px;
+  border: 1px solid rgba(117,255,148,.10);
+  background: rgba(117,255,148,.025);
+}
+.credential-featured {
+  border-color: rgba(117,255,148,.28);
+  background:
+    radial-gradient(circle at 88% 16%, rgba(117,255,148,.055), transparent 30%),
+    linear-gradient(180deg, rgba(10,17,12,.95), rgba(5,10,7,.96));
+}
+.credential-prep {
+  border-style: dashed;
+}
+.thm-icon {
+  color: #9dff45;
+}
+.deloitte-icon {
+  color: #9ccf31;
 }
 .tryhackme-card {
   grid-column: 1 / -1;
@@ -916,7 +976,8 @@ img, svg, canvas {
   .skills-grid,
   .project-grid,
   .blog-grid,
-  .credentials-grid {
+  .credentials-grid,
+  .credential-summary {
     grid-template-columns: 1fr;
   }
   .tryhackme-card {
