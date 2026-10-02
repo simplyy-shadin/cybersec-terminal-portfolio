@@ -13,7 +13,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=8" />
+  <link rel="stylesheet" href="styles.css?v=9" />
 </head>
 <body>
   <canvas id="matrix" aria-hidden="true"></canvas>
@@ -257,24 +257,130 @@
         <p class="section-subcopy">Completed credentials are listed only when verifiable; active preparation is labeled separately.</p>
       </div>
 
+      <div class="credential-summary" aria-label="Credential summary">
+        <div><strong>8</strong><span>completed credentials</span></div>
+        <div><strong>1</strong><span>certification in preparation</span></div>
+        <div><strong>2024 → 2026</strong><span>continuous hands-on learning</span></div>
+      </div>
+
       <div class="credentials-grid">
-        <article class="credential-card">
-          <div class="credential-status in-progress"><span></span> IN PREPARATION</div>
-          <div class="credential-icon" aria-hidden="true">SEC+</div>
+        <article class="credential-card credential-featured">
+          <div class="credential-status completed"><span></span> COMPLETED</div>
+          <div class="credential-icon thm-icon" aria-hidden="true">THM</div>
           <div>
-            <p class="credential-issuer">CompTIA</p>
-            <h3>Security+</h3>
-            <p>Currently preparing for the Security+ certification as part of my core security-engineering foundation.</p>
+            <p class="credential-issuer">TRYHACKME</p>
+            <h3>Pre Security Learning Path</h3>
+            <p>Completed the 19 hour 10 minute Pre Security learning path covering foundational cybersecurity concepts.</p>
+            <div class="credential-meta">
+              <span>17 MAR 2026</span>
+              <span>ID: THM-JF8P9HQRTG</span>
+            </div>
           </div>
         </article>
 
-        <article class="credential-card credential-placeholder">
-          <div class="credential-status"><span></span> VERIFIED ONLY</div>
-          <div class="credential-icon" aria-hidden="true">CERT</div>
+        <article class="credential-card credential-featured">
+          <div class="credential-status completed"><span></span> COMPLETED</div>
+          <div class="credential-icon deloitte-icon" aria-hidden="true">D</div>
           <div>
-            <p class="credential-issuer">Credential archive</p>
-            <h3>More certifications</h3>
-            <p>New certifications will be added here with issuer, credential ID/date and verification link after completion.</p>
+            <p class="credential-issuer">DELOITTE · FORAGE</p>
+            <h3>Cyber Job Simulation</h3>
+            <p>Completed Deloitte's practical Cyber Job Simulation through Forage, with hands-on cyber security tasks.</p>
+            <div class="credential-meta">
+              <span>04 MAR 2026</span>
+              <span>Issued by Forage</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="credential-card">
+          <div class="credential-status completed"><span></span> COMPLETED</div>
+          <div class="credential-icon" aria-hidden="true">OSINT</div>
+          <div>
+            <p class="credential-issuer">BASEL INSTITUTE ON GOVERNANCE</p>
+            <h3>Open-source Intelligence</h3>
+            <p>Completed the Basel Institute on Governance eLearning course in Open-source Intelligence.</p>
+            <div class="credential-meta"><span>04 AUG 2025</span></div>
+          </div>
+        </article>
+
+        <article class="credential-card">
+          <div class="credential-status completed"><span></span> COMPLETED</div>
+          <div class="credential-icon" aria-hidden="true">BASH</div>
+          <div>
+            <p class="credential-issuer">CENTRI</p>
+            <h3>Introduction to Bash</h3>
+            <p>Course completion covering Bash fundamentals and scripting for practical programming workflows.</p>
+            <div class="credential-meta">
+              <span>13 MAR 2025</span>
+              <span>ID: 599425243</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="credential-card">
+          <div class="credential-status completed"><span></span> COMPLETED</div>
+          <div class="credential-icon" aria-hidden="true">NET</div>
+          <div>
+            <p class="credential-issuer">CENTRI</p>
+            <h3>Introduction to Network Analysis</h3>
+            <p>Networking and PCAP analysis using Wireshark and TCPDump, including analysis of malicious traffic.</p>
+            <div class="credential-meta">
+              <span>08 JAN 2025</span>
+              <span>ID: 580445631</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="credential-card">
+          <div class="credential-status completed"><span></span> COMPLETED</div>
+          <div class="credential-icon" aria-hidden="true">OSINT</div>
+          <div>
+            <p class="credential-issuer">CENTRI</p>
+            <h3>Introduction to OSINT</h3>
+            <p>Course completion covering OSINT data, tools, techniques and their use across defensive and offensive contexts.</p>
+            <div class="credential-meta">
+              <span>28 DEC 2024</span>
+              <span>ID: 623067220</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="credential-card">
+          <div class="credential-status completed"><span></span> COMPLETED</div>
+          <div class="credential-icon" aria-hidden="true">DARK</div>
+          <div>
+            <p class="credential-issuer">CENTRI</p>
+            <h3>Introduction to Dark Web Operations</h3>
+            <p>Course completion covering clear, deep and dark web regions and operational intelligence collection concepts.</p>
+            <div class="credential-meta">
+              <span>17 DEC 2024</span>
+              <span>ID: 434713752</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="credential-card">
+          <div class="credential-status completed"><span></span> COMPLETED</div>
+          <div class="credential-icon" aria-hidden="true">PY</div>
+          <div>
+            <p class="credential-issuer">CENTRI</p>
+            <h3>Introduction to Python</h3>
+            <p>Python fundamentals, IDE usage and small coding projects including a network port scanner.</p>
+            <div class="credential-meta">
+              <span>21 NOV 2024</span>
+              <span>ID: 944617476</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="credential-card credential-prep">
+          <div class="credential-status in-progress"><span></span> IN PREPARATION</div>
+          <div class="credential-icon" aria-hidden="true">SEC+</div>
+          <div>
+            <p class="credential-issuer">COMPTIA</p>
+            <h3>Security+</h3>
+            <p>Currently preparing for CompTIA Security+ as part of my core security-engineering foundation.</p>
+            <div class="credential-meta"><span>ACTIVE STUDY</span></div>
           </div>
         </article>
 
@@ -383,6 +489,6 @@
     <p class="checksum">SHA256: <span id="fakeChecksum">GENERATING...</span></p>
   </footer>
 
-  <script src="script.js?v=8"></script>
+  <script src="script.js?v=9"></script>
 </body>
 </html>
