@@ -789,6 +789,21 @@ main, .site-footer { position: relative; z-index: 2; }
   border: 1px solid rgba(117,255,148,.10);
   background: rgba(117,255,148,.025);
 }
+.credential-view-link {
+  grid-column: 1 / -1;
+  width: fit-content;
+  margin-top: 2px;
+  color: var(--green);
+  font-family: "IBM Plex Mono", monospace;
+  font-size: .7rem;
+  border-bottom: 1px solid rgba(117,255,148,.22);
+}
+.credential-view-link:hover,
+.credential-view-link:focus-visible {
+  border-bottom-color: var(--green);
+  outline: none;
+  text-shadow: 0 0 12px rgba(117,255,148,.24);
+}
 .credential-featured {
   border-color: rgba(117,255,148,.28);
   background:
