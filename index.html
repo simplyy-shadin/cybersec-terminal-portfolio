@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Shadin K V — Cybersecurity Engineer portfolio focused on AppSec, VAPT, SOC, cloud security and security automation." />
+  <meta name="theme-color" content="#050807" />
+  <meta property="og:title" content="Shadin K V | Cybersecurity Portfolio" />
+  <meta property="og:description" content="Security engineering, VAPT, SOC, DevSecOps, cloud security and automation projects." />
+  <meta property="og:type" content="website" />
+  <title>Shadin K V // Cybersecurity Portfolio</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <canvas id="matrix" aria-hidden="true"></canvas>
+  <div class="noise" aria-hidden="true"></div>
+
+  <div id="boot" class="boot-screen" aria-hidden="true">
+    <div class="boot-log" id="bootLog"></div>
+  </div>
+
+  <header class="site-header">
+    <a class="brand" href="#home" aria-label="Home">
+      <span class="brand-mark">[SKV]</span>
+      <span class="brand-path">~/cyber-portfolio</span>
+    </a>
+    <nav class="nav" aria-label="Primary navigation">
+      <a href="#about">about</a>
+      <a href="#projects">projects</a>
+      <a href="#skills">skills</a>
+      <a href="#timeline">timeline</a>
+      <a href="#terminal">terminal</a>
+    </nav>
+    <div class="header-status"><span class="pulse"></span> OPEN_TO_SECURITY_ROLES</div>
+  </header>
+
+  <main>
+    <section id="home" class="hero section-shell">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">root@shadin:~$ whoami</p>
+        <h1 class="glitch" data-text="SHADIN K V">SHADIN K V</h1>
+        <p class="hero-role"><span class="prompt">&gt;</span> <span id="typewriter"></span><span class="cursor">_</span></p>
+        <p class="hero-lead">
+          I build, break, monitor and harden systems — combining application security,
+          offensive testing, detection engineering, cloud security and automation.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">./view-projects</a>
+          <a class="btn btn-ghost" href="#terminal">./open-terminal</a>
+        </div>
+        <div class="signal-row" aria-label="Focus areas">
+          <span>APPSEC</span><span>VAPT</span><span>DEVSECOPS</span><span>SOC</span><span>AWS</span><span>AUTOMATION</span>
+        </div>
+      </div>
+
+      <aside class="hero-console reveal" aria-label="Profile system information">
+        <div class="window-bar"><span></span><span></span><span></span><b>profile.sys</b></div>
+        <div class="console-body">
+          <pre class="ascii" aria-hidden="true">
+   ███████╗██╗  ██╗██╗   ██╗
+   ██╔════╝██║ ██╔╝██║   ██║
+   ███████╗█████╔╝ ██║   ██║
+   ╚════██║██╔═██╗ ╚██╗ ██╔╝
+   ███████║██║  ██╗ ╚████╔╝
+   ╚══════╝╚═╝  ╚═╝  ╚═══╝
+          </pre>
+          <div class="sysline"><span>identity</span><b>Shadin K V</b></div>
+          <div class="sysline"><span>track</span><b>Security Engineering / AppSec</b></div>
+          <div class="sysline"><span>secondary</span><b>VAPT / SOC / Cloud</b></div>
+          <div class="sysline"><span>education</span><b>IIT Guwahati — Data Science & AI (ongoing)</b></div>
+          <div class="sysline"><span>experience</span><b>Cybersecurity Intern — Brototype</b></div>
+          <div class="sysline"><span>location</span><b>Kerala, India</b></div>
+          <div class="sysline"><span>status</span><b class="ok">ACTIVE_LEARNING</b></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="about" class="content-section section-shell reveal">
+      <div class="section-heading">
+        <p>01 // reconnaissance</p>
+        <h2>About me</h2>
+      </div>
+      <div class="about-grid">
+        <div class="panel copy-panel">
+          <p>
+            I’m a cybersecurity student and hands-on security builder focused on the path from
+            <strong>Security Engineering</strong> into <strong>Application / Product Security</strong>,
+            with growing depth in cloud and AI security. I enjoy projects where security is not a report at the end,
+            but a control engineered into the system.
+          </p>
+          <p>
+            My work spans secure API design, DevSecOps security gates, vulnerability assessment tooling,
+            AWS SOC architecture, SIEM/detection workflows, automated response, file-integrity monitoring,
+            network analysis and practical web application testing.
+          </p>
+        </div>
+        <div class="panel doctrine-panel">
+          <div class="doctrine"><span>01</span><p><b>Build securely.</b><br />Threat model early. Harden by default.</p></div>
+          <div class="doctrine"><span>02</span><p><b>Validate manually.</b><br />A scanner finding is evidence, not truth.</p></div>
+          <div class="doctrine"><span>03</span><p><b>Automate repeatable controls.</b><br />Shift checks left without hiding risk.</p></div>
+          <div class="doctrine"><span>04</span><p><b>Defend with context.</b><br />Logs become useful when correlated and actionable.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="content-section section-shell reveal">
+      <div class="section-heading">
+        <p>02 // mission archive</p>
+        <h2>Selected security projects</h2>
+      </div>
+      <div class="project-grid">
+        <article class="project-card featured">
+          <div class="project-top"><span class="tag critical">VAPT PLATFORM</span><span class="project-id">PX-01</span></div>
+          <h3>VAPTForge</h3>
+          <p>Portfolio-grade vulnerability assessment and penetration testing platform with explicit scope enforcement, recon, web/TLS checks, scanner orchestration, correlation, analyst validation, retesting, reporting and a local dashboard.</p>
+          <div class="project-stack"><span>Python</span><span>FastAPI</span><span>Nmap</span><span>Nuclei</span><span>ffuf</span><span>Nikto</span><span>SQLite</span><span>CVSS</span></div>
+          <ul class="project-points">
+            <li>Native deep-web crawler and bounded parameter analysis</li>
+            <li>Finding lifecycle, evidence confidence and deterministic fingerprints</li>
+            <li>Markdown / JSON / HTML / PDF / SARIF reporting</li>
+          </ul>
+          <a class="project-link" href="https://github.com/simplyy-shadin/vaptforge" target="_blank" rel="noreferrer">github.com/simplyy-shadin/vaptforge ↗</a>
+        </article>
+
+        <article class="project-card">
+          <div class="project-top"><span class="tag">APPSEC + DEVSECOPS</span><span class="project-id">PX-02</span></div>
+          <h3>SecureFlow DevSecOps</h3>
+          <p>FastAPI security-engineering project that embeds controls across source code, CI/CD, containers, supply chain and Kubernetes deployment.</p>
+          <div class="project-stack"><span>FastAPI</span><span>Semgrep</span><span>Trivy</span><span>Gitleaks</span><span>Checkov</span><span>ZAP</span><span>Kubernetes</span></div>
+          <ul class="project-points">
+            <li>JWT + Argon2id secure authentication design</li>
+            <li>SBOM, provenance and immutable image digest workflow</li>
+            <li>STRIDE threat model and explicit residual-risk documentation</li>
+          </ul>
+          <a class="project-link" href="https://github.com/simplyy-shadin/secureflow-devsecops" target="_blank" rel="noreferrer">github.com/simplyy-shadin/secureflow-devsecops ↗</a>
+        </article>
+
+        <article class="project-card">
+          <div class="project-top"><span class="tag blue">SOC / CLOUD</span><span class="project-id">PX-03</span></div>
+          <h3>Cloud SOC on AWS</h3>
+          <p>Cloud-based detection and response lab integrating Wazuh, Suricata, ModSecurity, DVWA, AWS Lambda, Shuffle SOAR and a Windows Elastic detection layer.</p>
+          <div class="project-stack"><span>AWS</span><span>Wazuh</span><span>Suricata</span><span>ModSecurity</span><span>Lambda</span><span>Shuffle</span><span>Elastic</span></div>
+          <ul class="project-points">
+            <li>Custom detection for brute-force and web attack telemetry</li>
+            <li>Threat enrichment and automated incident notification</li>
+            <li>Automated attacker-IP blocking response workflow</li>
+          </ul>
+          <a class="project-link" href="https://github.com/simplyy-shadin/cloud-soc-on-aws" target="_blank" rel="noreferrer">github.com/simplyy-shadin/cloud-soc-on-aws ↗</a>
+        </article>
+
+        <article class="project-card">
+          <div class="project-top"><span class="tag amber">DETECTION ENGINEERING</span><span class="project-id">PX-04</span></div>
+          <h3>File Integrity + Jira Automation</h3>
+          <p>Blue-team monitoring project using signed baselines, immutable tamper-evident events and durable Jira incident delivery.</p>
+          <div class="project-stack"><span>Python</span><span>SHA-256</span><span>HMAC</span><span>SQLite</span><span>Jira API</span><span>CI</span></div>
+          <ul class="project-points">
+            <li>Detects content, metadata, deletion and symlink changes</li>
+            <li>HMAC-linked audit chain with integrity verification</li>
+            <li>Retry / backoff / dead-letter incident delivery</li>
+          </ul>
+          <a class="project-link" href="https://github.com/simplyy-shadin/file-integrity-jira-automation" target="_blank" rel="noreferrer">github.com/simplyy-shadin/file-integrity-jira-automation ↗</a>
+        </article>
+
+        <article class="project-card">
+          <div class="project-top"><span class="tag purple">NETWORK SECURITY</span><span class="project-id">PX-05</span></div>
+          <h3>Network Packet Visualizer</h3>
+          <p>PCAP analysis utility that extracts packet metadata and visualizes protocol distribution for traffic-analysis workflows.</p>
+          <div class="project-stack"><span>Python</span><span>PyShark</span><span>tshark</span><span>Pandas</span><span>Matplotlib</span></div>
+          <a class="project-link" href="https://github.com/simplyy-shadin/network-packet-visualizer" target="_blank" rel="noreferrer">github.com/simplyy-shadin/network-packet-visualizer ↗</a>
+        </article>
+
+        <article class="project-card repo-card">
+          <div class="project-top"><span class="tag muted">MORE OPERATIONS</span><span class="project-id">PX-*</span></div>
+          <h3>More repositories</h3>
+          <p>Secure Flask API work, network scanner utilities and additional cybersecurity labs live on my GitHub profile.</p>
+          <div class="repo-radar" aria-hidden="true"><span></span><span></span><span></span><i></i></div>
+          <a class="project-link" href="https://github.com/simplyy-shadin?tab=repositories" target="_blank" rel="noreferrer">explore all repositories ↗</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="skills" class="content-section section-shell reveal">
+      <div class="section-heading">
+        <p>03 // capability matrix</p>
+        <h2>Security toolkit</h2>
+      </div>
+      <div class="skills-grid">
+        <div class="skill-cluster"><h3>Application Security</h3><p>OWASP Top 10 · threat modeling · secure authentication · API security · Burp Suite · ZAP · Semgrep · secure headers · manual validation</p></div>
+        <div class="skill-cluster"><h3>VAPT / Offensive</h3><p>Nmap · Nuclei · ffuf · Nikto · sqlmap · XSStrike · DIRB · DirBuster · OpenVAS · reconnaissance · enumeration · reporting</p></div>
+        <div class="skill-cluster"><h3>DevSecOps</h3><p>GitHub Actions · Gitleaks · Trivy · Checkov · SBOM · container hardening · Kubernetes security · CI security gates · supply-chain controls</p></div>
+        <div class="skill-cluster"><h3>SOC / Detection</h3><p>Wazuh · Suricata · Elastic/Kibana · SIEM rules · log analysis · brute-force detection · file integrity · alert triage · SOAR concepts</p></div>
+        <div class="skill-cluster"><h3>Cloud Security</h3><p>AWS EC2 · VPC concepts · CloudTrail · Lambda · WAF/security groups · cloud logging · automated response architecture</p></div>
+        <div class="skill-cluster"><h3>Engineering</h3><p>Python · FastAPI · Flask · REST APIs · SQLite · Linux · Docker · Git/GitHub · JSON · Bash/CLI workflows · test automation</p></div>
+      </div>
+    </section>
+
+    <section id="timeline" class="content-section section-shell reveal">
+      <div class="section-heading">
+        <p>04 // activity log</p>
+        <h2>Experience & education</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="time">2024 → PRESENT</div>
+          <div class="timeline-content"><h3>Cybersecurity Intern · Brototype</h3><p>Hands-on cybersecurity learning and project work across SOC operations, VAPT, application security, cloud security, security tooling and technical communication.</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="time">ONGOING</div>
+          <div class="timeline-content"><h3>Bachelor of Science (Honors) in Data Science & Artificial Intelligence · IIT Guwahati</h3><p>Ongoing degree supporting a long-term focus on security engineering, cloud, automation and AI-security intersections.</p></div>
+        </div>
+        <div class="timeline-item">
+          <div class="time">2022 → 2024</div>
+          <div class="timeline-content"><h3>Higher Secondary Education · Biology Science</h3><p>Completed with 91%.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="terminal" class="content-section section-shell terminal-section reveal">
+      <div class="section-heading">
+        <p>05 // secure channel</p>
+        <h2>Interactive terminal</h2>
+        <p class="terminal-hint">Type <code>help</code> to discover commands. Contact details live here by design.</p>
+      </div>
+      <div class="terminal-window" id="terminalWindow">
+        <div class="terminal-titlebar">
+          <div><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span></div>
+          <b>visitor@shadin:~/contact</b><span>UTF-8</span>
+        </div>
+        <div class="terminal-output" id="terminalOutput" aria-live="polite">
+          <div><span class="muted-text">[system]</span> encrypted-ish channel initialized.</div>
+          <div><span class="muted-text">[system]</span> type <b class="green-text">help</b> and press Enter.</div>
+        </div>
+        <form class="terminal-input-row" id="terminalForm" autocomplete="off">
+          <label for="terminalInput">visitor@shadin:~$</label>
+          <input id="terminalInput" name="command" type="text" spellcheck="false" aria-label="Terminal command" autofocus />
+        </form>
+      </div>
+      <div class="terminal-cheats"><span>↑/↓ history</span><span>Tab autocomplete</span><span>Ctrl+L clear</span></div>
+    </section>
+  </main>
+
+  <footer class="site-footer section-shell">
+    <p>© <span id="year"></span> Shadin K V // built with HTML, CSS, JavaScript & unreasonable amounts of terminal green.</p>
+    <p class="checksum">SHA256: <span id="fakeChecksum">GENERATING...</span></p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
