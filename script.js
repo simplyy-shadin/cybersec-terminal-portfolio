@@ -103,7 +103,9 @@
       orbWrap.classList.toggle('mode-threat', mode === 'threat');
       orbWrap.classList.toggle('mode-defense', mode === 'defense');
     }
-    $('.orb-control').forEach(btn => btn.classList.toggle('active', btn.dataset.orbMode === mode));
+    $$('.orb-control').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.orbMode === mode);
+    });
     if (orbModeLabel) {
       orbModeLabel.textContent = {
         network: 'NETWORK MAP',
@@ -113,183 +115,225 @@
     }
   };
 
-  $('.orb-control').forEach(btn => btn.addEventListener('click', () => setOrbMode(btn.dataset.orbMode)));
-
-  if (orbCanvas && orbWrap) {
-    const ctx = orbCanvas.getContext('2d');
-    const nodeCount = 108;
-    const goldenAngle = Math.PI * (3 - Math.sqrt(5));
-    const nodes = Array.from({ length: nodeCount }, (_, i) => {
-      const y = 1 - (i / (nodeCount - 1)) * 2;
-      const r = Math.sqrt(Math.max(0, 1 - y * y));
-      const theta = goldenAngle * i;
-      return {
-        x: Math.cos(theta) * r,
-        y,
-        z: Math.sin(theta) * r,
-        threat: i % 23 === 0 || i % 37 === 0
-      };
+  try {
+    $$('.orb-control').forEach(btn => {
+      btn.addEventListener('click', () => setOrbMode(btn.dataset.orbMode));
     });
 
-    const edges = [];
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const dx = nodes[i].x - nodes[j].x;
-        const dy = nodes[i].y - nodes[j].y;
-        const dz = nodes[i].z - nodes[j].z;
-        if (dx * dx + dy * dy + dz * dz < 0.18 && edges.length < 260) edges.push([i, j]);
-      }
-    }
+    if (orbCanvas && orbWrap) {
+      const ctx = orbCanvas.getContext('2d');
+      if (!ctx) throw new Error('Canvas 2D context unavailable');
 
-    let width = 0, height = 0, dpr = 1;
-    let autoY = 0, tiltX = -0.16, tiltY = 0;
-    let targetX = -0.16, targetY = 0;
-    let pulse = 0;
-
-    const resizeOrb = () => {
-      const rect = orbWrap.getBoundingClientRect();
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = Math.max(1, rect.width);
-      height = Math.max(1, rect.height);
-      orbCanvas.width = Math.round(width * dpr);
-      orbCanvas.height = Math.round(height * dpr);
-      orbCanvas.style.width = width + 'px';
-      orbCanvas.style.height = height + 'px';
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    resizeOrb();
-    if ('ResizeObserver' in window) new ResizeObserver(resizeOrb).observe(orbWrap);
-    else addEventListener('resize', resizeOrb);
-
-    const rotatePoint = (p, ay, ax) => {
-      const cy = Math.cos(ay), sy = Math.sin(ay);
-      const cx = Math.cos(ax), sx = Math.sin(ax);
-      const x1 = p.x * cy - p.z * sy;
-      const z1 = p.x * sy + p.z * cy;
-      return {
-        x: x1,
-        y: p.y * cx - z1 * sx,
-        z: p.y * sx + z1 * cx
-      };
-    };
-
-    const projectPoint = p => {
-      const perspective = 3.25;
-      const depth = perspective / (perspective - p.z);
-      const scale = Math.min(width, height) * 0.31;
-      return {
-        x: width / 2 + p.x * scale * depth,
-        y: height / 2 + p.y * scale * depth,
-        z: p.z,
-        depth
-      };
-    };
-
-    const drawOrb = () => {
-      ctx.clearRect(0, 0, width, height);
-      autoY += orbMode === 'threat' ? 0.0052 : 0.0032;
-      pulse += 0.045;
-      tiltX += (targetX - tiltX) * 0.055;
-      tiltY += (targetY - tiltY) * 0.055;
-
-      const transformed = nodes.map(n => {
-        const r = rotatePoint(n, autoY + tiltY, tiltX);
-        return { ...projectPoint(r), threat: n.threat };
+      const nodeCount = 108;
+      const goldenAngle = Math.PI * (3 - Math.sqrt(5));
+      const nodes = Array.from({ length: nodeCount }, (_, i) => {
+        const y = 1 - (i / (nodeCount - 1)) * 2;
+        const r = Math.sqrt(Math.max(0, 1 - y * y));
+        const theta = goldenAngle * i;
+        return {
+          x: Math.cos(theta) * r,
+          y,
+          z: Math.sin(theta) * r,
+          threat: i % 23 === 0 || i % 37 === 0
+        };
       });
 
-      ctx.lineWidth = 0.7;
-      for (const [a, b] of edges) {
-        const p1 = transformed[a], p2 = transformed[b];
-        const front = Math.max(0.08, ((p1.z + p2.z) / 2 + 1) / 2);
-        if (orbMode === 'threat' && (p1.threat || p2.threat)) ctx.strokeStyle = `rgba(255,107,120,${0.18 + front * 0.22})`;
-        else if (orbMode === 'defense') ctx.strokeStyle = `rgba(107,200,255,${0.07 + front * 0.18})`;
-        else ctx.strokeStyle = `rgba(117,255,148,${0.06 + front * 0.18})`;
-        ctx.beginPath();
-        ctx.moveTo(p1.x, p1.y);
-        ctx.lineTo(p2.x, p2.y);
-        ctx.stroke();
-      }
-
-      if (orbMode === 'defense') {
-        ctx.save();
-        ctx.translate(width / 2, height / 2);
-        ctx.strokeStyle = 'rgba(107,200,255,.18)';
-        ctx.lineWidth = 1;
-        for (let i = 0; i < 3; i++) {
-          ctx.beginPath();
-          ctx.ellipse(0, 0, Math.min(width,height) * (.27 + i * .045), Math.min(width,height) * (.09 + i * .017), autoY * (i % 2 ? -1 : 1), 0, Math.PI * 2);
-          ctx.stroke();
+      const edges = [];
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dz = nodes[i].z - nodes[j].z;
+          if (dx * dx + dy * dy + dz * dz < 0.18 && edges.length < 260) edges.push([i, j]);
         }
-        ctx.restore();
       }
 
-      transformed
-        .map((p, i) => ({ ...p, i }))
-        .sort((a, b) => a.z - b.z)
-        .forEach(p => {
-          const alpha = 0.2 + ((p.z + 1) / 2) * 0.8;
-          const threatActive = orbMode === 'threat' && p.threat;
-          const radius = (threatActive ? 2.8 : 1.4) * p.depth;
+      let width = 0;
+      let height = 0;
+      let autoY = 0;
+      let tiltX = -0.16;
+      let tiltY = 0;
+      let targetX = -0.16;
+      let targetY = 0;
+      let pulse = 0;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-          if (threatActive) {
-            ctx.strokeStyle = `rgba(255,107,120,${0.28 + Math.sin(pulse + p.i) * 0.12})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, 6 + Math.sin(pulse + p.i) * 2, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.fillStyle = `rgba(255,107,120,${alpha})`;
-          } else if (orbMode === 'defense') {
-            ctx.fillStyle = `rgba(107,200,255,${alpha * .9})`;
-          } else {
-            ctx.fillStyle = `rgba(117,255,148,${alpha})`;
-          }
+      const resizeOrb = () => {
+        const rect = orbWrap.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        width = Math.max(1, rect.width);
+        height = Math.max(1, rect.height);
+        orbCanvas.width = Math.round(width * dpr);
+        orbCanvas.height = Math.round(height * dpr);
+        orbCanvas.style.width = width + 'px';
+        orbCanvas.style.height = height + 'px';
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
 
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, Math.max(0.8, radius), 0, Math.PI * 2);
-          ctx.fill();
+      const rotatePoint = (p, ay, ax) => {
+        const cy = Math.cos(ay);
+        const sy = Math.sin(ay);
+        const cx = Math.cos(ax);
+        const sx = Math.sin(ax);
+        const x1 = p.x * cy - p.z * sy;
+        const z1 = p.x * sy + p.z * cy;
+        return {
+          x: x1,
+          y: p.y * cx - z1 * sx,
+          z: p.y * sx + z1 * cx
+        };
+      };
+
+      const projectPoint = p => {
+        const perspective = 3.25;
+        const depth = perspective / (perspective - p.z);
+        const scale = Math.min(width, height) * 0.31;
+        return {
+          x: width / 2 + p.x * scale * depth,
+          y: height / 2 + p.y * scale * depth,
+          z: p.z,
+          depth
+        };
+      };
+
+      const drawOrb = () => {
+        ctx.clearRect(0, 0, width, height);
+        if (!reducedMotion) autoY += orbMode === 'threat' ? 0.0052 : 0.0032;
+        pulse += 0.045;
+        tiltX += (targetX - tiltX) * 0.055;
+        tiltY += (targetY - tiltY) * 0.055;
+
+        const transformed = nodes.map(n => {
+          const rotated = rotatePoint(n, autoY + tiltY, tiltX);
+          return { ...projectPoint(rotated), threat: n.threat };
         });
 
-      const core = 5 + Math.sin(pulse) * 1.4;
-      ctx.fillStyle = orbMode === 'threat' ? 'rgba(255,107,120,.85)' : orbMode === 'defense' ? 'rgba(107,200,255,.85)' : 'rgba(117,255,148,.85)';
-      ctx.beginPath();
-      ctx.arc(width / 2, height / 2, core, 0, Math.PI * 2);
-      ctx.fill();
+        ctx.lineWidth = 0.7;
+        for (const [a, b] of edges) {
+          const p1 = transformed[a];
+          const p2 = transformed[b];
+          const front = Math.max(0.08, ((p1.z + p2.z) / 2 + 1) / 2);
+          if (orbMode === 'threat' && (p1.threat || p2.threat)) {
+            ctx.strokeStyle = `rgba(255,107,120,${0.18 + front * 0.22})`;
+          } else if (orbMode === 'defense') {
+            ctx.strokeStyle = `rgba(107,200,255,${0.07 + front * 0.18})`;
+          } else {
+            ctx.strokeStyle = `rgba(117,255,148,${0.06 + front * 0.18})`;
+          }
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          ctx.stroke();
+        }
 
-      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) requestAnimationFrame(drawOrb);
-    };
+        if (orbMode === 'defense') {
+          ctx.save();
+          ctx.translate(width / 2, height / 2);
+          ctx.strokeStyle = 'rgba(107,200,255,.18)';
+          ctx.lineWidth = 1;
+          for (let i = 0; i < 3; i++) {
+            ctx.beginPath();
+            ctx.ellipse(
+              0,
+              0,
+              Math.min(width, height) * (.27 + i * .045),
+              Math.min(width, height) * (.09 + i * .017),
+              autoY * (i % 2 ? -1 : 1),
+              0,
+              Math.PI * 2
+            );
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) drawOrb();
-    else requestAnimationFrame(drawOrb);
+        transformed
+          .map((p, i) => ({ ...p, i }))
+          .sort((a, b) => a.z - b.z)
+          .forEach(p => {
+            const alpha = 0.2 + ((p.z + 1) / 2) * 0.8;
+            const threatActive = orbMode === 'threat' && p.threat;
+            const radius = (threatActive ? 2.8 : 1.4) * p.depth;
 
-    orbWrap.addEventListener('pointermove', e => {
-      const rect = orbWrap.getBoundingClientRect();
-      const nx = (e.clientX - rect.left) / rect.width - 0.5;
-      const ny = (e.clientY - rect.top) / rect.height - 0.5;
-      targetY = nx * 0.7;
-      targetX = -0.16 + ny * 0.48;
-    });
-    orbWrap.addEventListener('pointerleave', () => {
-      targetX = -0.16;
-      targetY = 0;
-    });
+            if (threatActive) {
+              ctx.strokeStyle = `rgba(255,107,120,${0.28 + Math.sin(pulse + p.i) * 0.12})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath();
+              ctx.arc(p.x, p.y, 6 + Math.sin(pulse + p.i) * 2, 0, Math.PI * 2);
+              ctx.stroke();
+              ctx.fillStyle = `rgba(255,107,120,${alpha})`;
+            } else if (orbMode === 'defense') {
+              ctx.fillStyle = `rgba(107,200,255,${alpha * .9})`;
+            } else {
+              ctx.fillStyle = `rgba(117,255,148,${alpha})`;
+            }
+
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, Math.max(0.8, radius), 0, Math.PI * 2);
+            ctx.fill();
+          });
+
+        const core = 5 + Math.sin(pulse) * 1.4;
+        ctx.fillStyle =
+          orbMode === 'threat'
+            ? 'rgba(255,107,120,.85)'
+            : orbMode === 'defense'
+              ? 'rgba(107,200,255,.85)'
+              : 'rgba(117,255,148,.85)';
+        ctx.beginPath();
+        ctx.arc(width / 2, height / 2, core, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (!reducedMotion) requestAnimationFrame(drawOrb);
+      };
+
+      resizeOrb();
+      if ('ResizeObserver' in window) {
+        new ResizeObserver(() => resizeOrb()).observe(orbWrap);
+      } else {
+        addEventListener('resize', resizeOrb);
+      }
+
+      orbWrap.addEventListener('pointermove', event => {
+        const rect = orbWrap.getBoundingClientRect();
+        const nx = (event.clientX - rect.left) / rect.width - 0.5;
+        const ny = (event.clientY - rect.top) / rect.height - 0.5;
+        targetY = nx * 0.7;
+        targetX = -0.16 + ny * 0.48;
+      });
+
+      orbWrap.addEventListener('pointerleave', () => {
+        targetX = -0.16;
+        targetY = 0;
+      });
+
+      drawOrb();
     }
+  } catch (error) {
+    console.warn('3D visualization disabled:', error);
+    if (orbWrap) orbWrap.classList.add('orb-fallback');
+    if (orbModeLabel) orbModeLabel.textContent = 'TELEMETRY READY';
   }
 
   // Pointer-reactive project cards
-  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-    $('.tilt-card').forEach(card => {
-      card.addEventListener('pointermove', e => {
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left) / rect.width - 0.5;
-        const y = (e.clientY - rect.top) / rect.height - 0.5;
-        card.style.setProperty('--ry', `${x * 7}deg`);
-        card.style.setProperty('--rx', `${y * -6}deg`);
+  try {
+    if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+      $$('.tilt-card').forEach(card => {
+        card.addEventListener('pointermove', event => {
+          const rect = card.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width - 0.5;
+          const y = (event.clientY - rect.top) / rect.height - 0.5;
+          card.style.setProperty('--ry', `${x * 7}deg`);
+          card.style.setProperty('--rx', `${y * -6}deg`);
+        });
+        card.addEventListener('pointerleave', () => {
+          card.style.setProperty('--ry', '0deg');
+          card.style.setProperty('--rx', '0deg');
+        });
       });
-      card.addEventListener('pointerleave', () => {
-        card.style.setProperty('--ry', '0deg');
-        card.style.setProperty('--rx', '0deg');
-      });
-    });
+    }
+  } catch (error) {
+    console.warn('3D card tilt disabled:', error);
   }
 
   // Terminal
