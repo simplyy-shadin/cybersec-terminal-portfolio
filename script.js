@@ -383,11 +383,13 @@
     tryhackme: 'https://tryhackme.com/p/simplyy.hacker',
     medium: 'https://medium.com/@shdnkval',
     x: 'https://x.com/simplyy_shadin',
-    email: 'mailto:shdnkval@gmail.com'
+    email: 'mailto:shdnkval@gmail.com',
+    hacker: 'hacker-mode.html',
+    ctf: 'hacker-mode.html'
   };
 
   const commands = {
-    help: () => `Available commands:\n\n  about       short profile\n  whoami      identity + current focus\n  skills      capability summary\n  projects    selected project index\n  blogs       security articles and write-ups\n  certs       certifications and learning\n  contact     contact channels\n  socials     public profiles\n  education   education summary\n  experience  current experience\n  github      open GitHub\n  linkedin    open LinkedIn\n  tryhackme   open TryHackMe\n  email       open email client\n  resume      resume/CV status\n  scan        run visual threat scan\n  defend      activate defense grid\n  matrix      boost background matrix\n  trace       simulated safe route trace\n  clear       clear terminal\n  banner      show terminal banner\n\nTip: type 'open github' or 'open linkedin'.`,
+    help: () => `Available commands:\n\n  about       short profile\n  whoami      identity + current focus\n  skills      capability summary\n  projects    selected project index\n  blogs       security articles and write-ups\n  certs       certifications and learning\n  contact     contact channels\n  socials     public profiles\n  education   education summary\n  experience  current experience\n  github      open GitHub\n  linkedin    open LinkedIn\n  tryhackme   open TryHackMe\n  email       open email client\n  resume      resume/CV status\n  hacker      open browser-only mini CTF\n  ctf         alias for Hacker Mode\n  scan        run visual threat scan\n  defend      activate defense grid\n  matrix      boost background matrix\n  trace       simulated safe route trace\n  clear       clear terminal\n  banner      show terminal banner\n\nTip: type 'open github' or 'open linkedin'.`,
     about: () => `Shadin K V — aka simplyy-hacker — cybersecurity student and builder focused on Security Engineering, AppSec/Product Security, VAPT, SOC/detection, cloud security and automation.`,
     whoami: () => `user: Shadin K V\nalias: simplyy-hacker\nrole: Cybersecurity Intern / Security Engineering learner\nprimary_track: Security Engineering -> AppSec/Product Security -> Cloud/AI Security\nsecondary_tracks: VAPT | SOC | Detection Engineering | Cloud Security\nlocation: Kerala, India`,
     skills: () => `appsec: OWASP, Burp Suite, ZAP, threat modeling, API security, secure auth\nvapt: Nmap, Nuclei, ffuf, Nikto, sqlmap, XSStrike, recon, reporting\ndevsecops: GitHub Actions, Semgrep, Gitleaks, Trivy, Checkov, SBOM, containers, Kubernetes\nsoc: Wazuh, Suricata, Elastic/Kibana, SIEM rules, log analysis, SOAR workflows\ncloud: AWS EC2/VPC/CloudTrail/Lambda/WAF concepts\nengineering: Python, FastAPI, Flask, REST, SQLite, Linux, Docker, Git`,
